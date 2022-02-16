@@ -1,5 +1,5 @@
 services:
-  benny:
+  bot:
     image: ghcr.io/your-name/your-repo:latest
     restart: unless-stopped
     volumes:

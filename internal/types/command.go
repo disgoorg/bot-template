@@ -12,18 +12,11 @@ type (
 )
 
 type Command struct {
-	Create              discord.SlashCommandCreate
+	Create              discord.ApplicationCommandCreate
 	Handler             CommandHandler
 	SubCommandHandler   map[string]CommandHandler
 	ComponentHandler    map[string]ComponentHandler
 	AutoCompleteHandler AutocompleteHandler
-}
-
-func (b *Bot) LoadCommands(cmds []Command) {
-	b.Commands = NewCommandMap(b)
-	for _, cmd := range cmds {
-		b.Commands.AddCommand(cmd)
-	}
 }
 
 func (b *Bot) SyncCommands() error {
@@ -35,14 +28,10 @@ func (b *Bot) SyncCommands() error {
 
 	if b.Config.DevMode {
 		b.Logger.Info("Syncing guild commands...")
-		if _, err := b.Bot.SetGuildCommands(b.Config.DevGuildID, commands); err != nil {
-			return err
-		}
-	} else {
-		b.Logger.Infof("Syncing global commands...")
-		_, err := b.Bot.SetCommands(commands)
+		_, err := b.Bot.SetGuildCommands(b.Config.DevGuildID, commands)
 		return err
 	}
-	b.Logger.Info("Synced commands")
-	return nil
+	b.Logger.Infof("Syncing global commands...")
+	_, err := b.Bot.SetCommands(commands)
+	return err
 }

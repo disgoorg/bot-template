@@ -12,19 +12,20 @@ import (
 )
 
 type Bot struct {
-	Bot      *core.Bot
-	Logger   log.Logger
-	Commands *CommandMap
-	DB       *bun.DB
-	Config   Config
-	Version  string
+	Bot       *core.Bot
+	Logger    log.Logger
+	Commands  *CommandMap
+	Listeners *Listeners
+	DB        *bun.DB
+	Config    Config
+	Version   string
 }
 
 func (b *Bot) SetupBot() (err error) {
 	b.Bot, err = bot.New(b.Config.Token,
 		bot.WithLogger(b.Logger),
 		bot.WithGatewayOpts(gateway.WithGatewayIntents(discord.GatewayIntentGuilds)),
-		bot.WithEventListeners(b.Commands),
+		bot.WithEventListeners(b.Commands, b.Listeners),
 	)
 	return err
 }

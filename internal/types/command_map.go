@@ -86,6 +86,8 @@ func (m *CommandMap) OnEvent(event core.Event) {
 	}
 }
 
-func (m *CommandMap) AddCommand(c Command) {
-	m.commands[c.Create.Name] = c
+func (m *CommandMap) AddCommands(c []Command) {
+	for _, cmd := range c {
+		m.commands[cmd.Create.Name] = cmd
+	}
 }
