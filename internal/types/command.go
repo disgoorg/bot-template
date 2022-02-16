@@ -20,8 +20,9 @@ type Command struct {
 }
 
 func (b *Bot) LoadCommands(cmds []Command) {
+	b.Commands = NewCommandMap(b)
 	for _, cmd := range cmds {
-		b.Commands.SetCommand(cmd)
+		b.Commands.AddCommand(cmd)
 	}
 }
 

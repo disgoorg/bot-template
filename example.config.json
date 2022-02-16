@@ -1,0 +1,13 @@
+{
+  "dev_mode": true,
+  "dev_guild_id": "",
+  "log_level": 0,
+  "token": "",
+  "database": {
+    "host": "",
+    "port": 0,
+    "user": "",
+    "password": "",
+    "db_name": ""
+  }
+}

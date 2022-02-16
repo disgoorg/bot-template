@@ -1,4 +1,4 @@
-module github.com/YourName/YourRepo
+module github.com/your-name/your-repo
 
 go 1.17
 

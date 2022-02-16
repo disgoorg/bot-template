@@ -3,7 +3,7 @@ package commands
 import (
 	"github.com/DisgoOrg/disgo/core/events"
 	"github.com/DisgoOrg/disgo/discord"
-	"github.com/YourName/YourRepo/internal/types"
+	"github.com/your-name/your-repo/internal/types"
 )
 
 var testCommand = types.Command{

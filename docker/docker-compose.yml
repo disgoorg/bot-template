@@ -1,0 +1,23 @@
+services:
+  benny:
+    image: ghcr.io/your-name/your-repo:latest
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/home/bot/config.json
+    command: --sync-commands=true --sync-db=true
+    networks:
+      - bot
+  database:
+    image: postgres
+    restart: unless-stopped
+    volumes:
+      - ./data/:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: bot
+      POSTGRES_DB: bot
+    networks:
+      - bot
+
+networks:
+  bot:

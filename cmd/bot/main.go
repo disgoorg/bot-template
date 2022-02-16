@@ -8,8 +8,8 @@ import (
 	"syscall"
 
 	"github.com/DisgoOrg/log"
-	"github.com/YourName/YourRepo/commands"
-	"github.com/YourName/YourRepo/internal/types"
+	"github.com/your-name/your-repo/commands"
+	"github.com/your-name/your-repo/internal/types"
 )
 
 var (
