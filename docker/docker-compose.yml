@@ -1,6 +1,6 @@
 services:
   bot:
-    image: ghcr.io/your-name/your-repo:latest
+    image: ghcr.io/DisgoOrg/bot-template
     restart: unless-stopped
     volumes:
       - ./config.json:/home/bot/config.json

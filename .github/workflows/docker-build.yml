@@ -10,12 +10,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build . --file docker/Dockerfile --tag $IMAGE_NAME
+        run: docker build . --build-arg VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,') --file docker/Dockerfile --tag $IMAGE_NAME
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -35,7 +34,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
       - name: Log into VPS
         uses: appleboy/ssh-action@master

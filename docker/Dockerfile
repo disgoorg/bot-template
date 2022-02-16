@@ -1,17 +1,19 @@
-FROM golang:1.17.6-alpine as BUILD
+FROM golang:1.17.6-alpine AS build
+
+ARG VERSION=dev
 
 WORKDIR /tmp/bot
 
 COPY . .
 
-RUN apk update && \
-    apk --no-cache --update add build-base git && \
-    go mod download && \
+RUN go mod download && \
     go mod verify && \
-    go build cmd/bot/main.go
+    go build -ldflags="-X 'main.version=${VERSION}'" -o bot cmd/bot/main.go
 
 FROM alpine
 
-COPY --from=BUILD /tmp/bot/build/. /home/bot/
+WORKDIR /home/bot
 
-ENTRYPOINT ./bot
+COPY --from=build /tmp/bot/bot /home/bot/bot
+
+ENTRYPOINT ["./bot"]

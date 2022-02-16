@@ -1,4 +1,4 @@
-module github.com/your-name/your-repo
+module github.com/DisgoOrg/bot-template
 
 go 1.17
 

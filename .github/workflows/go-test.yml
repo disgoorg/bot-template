@@ -1,9 +1,12 @@
 name: Go Test
 
-on: [push]
+on:
+  push:
+    branches:
+      - '**'
 
 jobs:
-  gobuild:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,32 +15,22 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.17
+
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
 
       - name: go build
         run: go build cmd/bot/main.go
 
-  govet:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-
       - name: go vet
         run: go vet -v ./...
 
-  gostaticcheck:
-    runs-on: ubuntu-latest
-    steps:
-      -   uses: actions/checkout@v2
-
-      -   name: Set up Go
-          uses: actions/setup-go@v2
-          with:
-            go-version: 1.17
-
-      -   name: go staticcheck
-          uses: dominikh/staticcheck-action@v1.1.0
+      - name: go staticcheck
+        uses: dominikh/staticcheck-action@v1.1.0

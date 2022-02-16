@@ -1,8 +1,8 @@
 package modules
 
 import (
-	"github.com/YourName/YourRepo/internal/types"
-	"github.com/YourName/YourRepo/modules/test"
+	"github.com/DisgoOrg/bot-template/internal/types"
+	"github.com/DisgoOrg/bot-template/modules/test"
 )
 
 var Modules = []types.Module{

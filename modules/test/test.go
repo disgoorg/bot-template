@@ -1,9 +1,9 @@
 package test
 
 import (
+	"github.com/DisgoOrg/bot-template/internal/types"
 	"github.com/DisgoOrg/disgo/core"
 	"github.com/DisgoOrg/disgo/discord"
-	"github.com/YourName/YourRepo/internal/types"
 )
 
 var (
