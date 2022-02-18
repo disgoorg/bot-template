@@ -27,7 +27,7 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: go build
-        run: go build cmd/bot/main.go
+        run: go build cmd/bot/bot.go
 
       - name: go vet
         run: go vet -v ./...
