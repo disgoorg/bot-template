@@ -30,37 +30,26 @@ func (m *CommandMap) OnEvent(event core.Event) {
 				} else if d.SubCommandName != nil {
 					name = *d.SubCommandName
 				}
-				if name != "" {
-					if h := cmd.SubCommandHandler[name]; h != nil {
-						if err := h(m.bot, e); err != nil {
-							m.bot.Logger.Errorf("Failed to handle subcommand \"%s\": %s", name, err)
-						}
-
-						return
-					}
-					m.bot.Logger.Errorf("No subcommand handler for \"%s\" on command \"%s\"", name, e.Data.Name())
+				if cmd.CommandHandler == nil {
+					m.bot.Logger.Errorf("No command handler for \"%s\"", e.Data.Name())
 					return
 				}
-				if h := cmd.Handler; h != nil {
-					err := h(m.bot, e)
-					if err != nil {
-						m.bot.Logger.Errorf("Failed to handle command \"%s\": %s", name, err)
+				err := cmd.CommandHandler[buildCommandPath(d.SubCommandName, d.SubCommandGroupName)](m.bot, e)
+				if err != nil {
+					m.bot.Logger.Errorf("Failed to handle command \"%s\": %s", name, err)
 
-					}
-					return
 				}
-				m.bot.Logger.Errorf("No command handler for \"%s\"", e.Data.Name())
 			}
 		}
 	} else if e, ok := event.(*events.AutocompleteInteractionEvent); ok {
 		if cmd, ok := m.commands[e.Data.CommandName]; ok {
-			if cmd.AutoCompleteHandler != nil {
-				if err := cmd.AutoCompleteHandler(m.bot, e); err != nil {
-					m.bot.Logger.Errorf("Failed to handle autocomplete for \"%s\": %s", e.Data.CommandName, err)
-				}
+			if cmd.AutoCompleteHandler == nil {
+				m.bot.Logger.Errorf("No autocomplete handler for command \"%s\"", e.Data.CommandName)
 				return
 			}
-			m.bot.Logger.Errorf("No autocomplete handler for command \"%s\"", e.Data.CommandName)
+			if err := cmd.AutoCompleteHandler[buildCommandPath(e.Data.SubCommandName, e.Data.SubCommandGroupName)](m.bot, e); err != nil {
+				m.bot.Logger.Errorf("Failed to handle autocomplete for \"%s\": %s", e.Data.CommandName, err)
+			}
 		}
 	} else if e, ok := event.(*events.ComponentInteractionEvent); ok {
 		customID := e.Data.ID().String()
@@ -86,8 +75,19 @@ func (m *CommandMap) OnEvent(event core.Event) {
 	}
 }
 
-func (m *CommandMap) AddCommands(c []Command) {
+func buildCommandPath(subcommand *string, subcommandGroup *string) string {
+	var path string
+	if subcommand != nil {
+		path = *subcommand
+	}
+	if subcommandGroup != nil {
+		path += "/" + *subcommandGroup
+	}
+	return path
+}
+
+func (m *CommandMap) AddAll(c []Command) {
 	for _, cmd := range c {
-		m.commands[cmd.Create.Name] = cmd
+		m.commands[cmd.Create.Name()] = cmd
 	}
 }

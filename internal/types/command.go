@@ -13,10 +13,9 @@ type (
 
 type Command struct {
 	Create              discord.ApplicationCommandCreate
-	Handler             CommandHandler
-	SubCommandHandler   map[string]CommandHandler
+	CommandHandler      map[string]CommandHandler
 	ComponentHandler    map[string]ComponentHandler
-	AutoCompleteHandler AutocompleteHandler
+	AutoCompleteHandler map[string]AutocompleteHandler
 }
 
 func (b *Bot) SyncCommands() error {

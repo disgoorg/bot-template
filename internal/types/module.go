@@ -1,15 +1,17 @@
 package types
 
-import "github.com/DisgoOrg/disgo/core"
+import (
+	"github.com/DisgoOrg/disgo/core"
+)
 
 func (b *Bot) LoadModules(modules []Module) {
 	b.Logger.Info("Loading modules...")
-	commandsMap := NewCommandMap(b)
+	commands := NewCommandMap(b)
 	listeners := NewListeners(b)
 
 	for _, module := range modules {
 		if mod, ok := module.(CommandsModule); ok {
-			commandsMap.AddCommands(mod.Commands())
+			commands.AddAll(mod.Commands())
 		}
 
 		if mod, ok := module.(ListenerModule); ok {
@@ -18,7 +20,7 @@ func (b *Bot) LoadModules(modules []Module) {
 	}
 
 	b.Logger.Infof("Loaded %d modules", len(modules))
-	b.Commands = commandsMap
+	b.Commands = commands
 	b.Listeners = listeners
 }
 

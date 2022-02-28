@@ -3,7 +3,7 @@ module github.com/DisgoOrg/bot-template
 go 1.17
 
 require (
-	github.com/DisgoOrg/disgo v0.7.3-0.20220227185338-3fc5bed4e429
+	github.com/DisgoOrg/disgo v0.7.3-0.20220228013717-4c02ad4f3d30
 	github.com/DisgoOrg/log v1.1.3
 	github.com/DisgoOrg/snowflake v1.0.4
 	github.com/pkg/errors v0.9.1

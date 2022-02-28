@@ -18,11 +18,13 @@ func (Module) Commands() []types.Command {
 	return []types.Command{
 		{
 			Create: discord.SlashCommandCreate{
-				Name:              "test",
+				CommandName:       "test",
 				Description:       "Test command",
 				DefaultPermission: true,
 			},
-			Handler: testHandler,
+			CommandHandler: map[string]types.CommandHandler{
+				"": testHandler,
+			},
 		},
 	}
 }
