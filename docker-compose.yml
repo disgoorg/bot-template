@@ -1,6 +1,6 @@
 services:
   bot:
-    image: ghcr.io/DisgoOrg/bot-template
+    image: ghcr.io/disgoorg/bot-template
     restart: unless-stopped
     volumes:
       - ./config.json:/home/bot/config.json

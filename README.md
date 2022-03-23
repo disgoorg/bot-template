@@ -1,5 +1,5 @@
-[![Docker](https://github.com/DisgoOrg/bot-template/actions/workflows/docker-build.yml/badge.svg)](https://github.com/DisgoOrg/bot-template/actions/workflows/docker-build.yml)
-[![Test](https://github.com/DisgoOrg/bot-template/actions/workflows/go-test.yml/badge.svg)](https://github.com/DisgoOrg/bot-template/actions/workflows/go-test.yml)
+[![Docker](https://github.com/disgoorg/bot-template/actions/workflows/docker-build.yml/badge.svg)](https://github.com/disgoorg/bot-template/actions/workflows/docker-build.yml)
+[![Test](https://github.com/disgoorg/bot-template/actions/workflows/go-test.yml/badge.svg)](https://github.com/disgoorg/bot-template/actions/workflows/go-test.yml)
 
 # bot-template
 
