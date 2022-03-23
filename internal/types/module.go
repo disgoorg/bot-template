@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/DisgoOrg/disgo/core"
+	"github.com/disgoorg/disgo/bot"
 )
 
 func (b *Bot) LoadModules(modules []Module) {
@@ -31,7 +31,7 @@ type CommandsModule interface {
 }
 
 type ListenerModule interface {
-	OnEvent(b *Bot, event core.Event)
+	OnEvent(b *Bot, event bot.Event)
 }
 
 type CommandModule struct {

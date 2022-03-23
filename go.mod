@@ -1,11 +1,11 @@
-module github.com/DisgoOrg/bot-template
+module github.com/disgoorg/bot-template
 
 go 1.17
 
 require (
-	github.com/DisgoOrg/disgo v0.7.3-0.20220228013717-4c02ad4f3d30
-	github.com/DisgoOrg/log v1.1.3
-	github.com/DisgoOrg/snowflake v1.0.4
+	github.com/disgoorg/disgo v0.7.5-0.20220323112840-d41b55ad56ef
+	github.com/disgoorg/log v1.2.0
+	github.com/disgoorg/snowflake v1.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/uptrace/bun v1.0.25
 	github.com/uptrace/bun/dialect/pgdialect v1.0.25
@@ -13,7 +13,6 @@ require (
 )
 
 require (
-	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/sasha-s/go-csync v0.0.0-20210812194225-61421b77c44b // indirect

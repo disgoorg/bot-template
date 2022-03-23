@@ -3,16 +3,16 @@ package types
 import (
 	"context"
 
-	"github.com/DisgoOrg/disgo/core"
-	"github.com/DisgoOrg/disgo/core/bot"
-	"github.com/DisgoOrg/disgo/discord"
-	"github.com/DisgoOrg/disgo/gateway"
-	"github.com/DisgoOrg/log"
+	"github.com/disgoorg/disgo"
+	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/discord"
+	"github.com/disgoorg/disgo/gateway"
+	"github.com/disgoorg/log"
 	"github.com/uptrace/bun"
 )
 
 type Bot struct {
-	Bot       *core.Bot
+	Client    bot.Client
 	Logger    log.Logger
 	Commands  *CommandMap
 	Listeners *Listeners
@@ -22,14 +22,14 @@ type Bot struct {
 }
 
 func (b *Bot) SetupBot() (err error) {
-	b.Bot, err = bot.New(b.Config.Token,
+	b.Client, err = disgo.New(b.Config.Token,
 		bot.WithLogger(b.Logger),
-		bot.WithGatewayOpts(gateway.WithGatewayIntents(discord.GatewayIntentGuilds)),
+		bot.WithGatewayConfigOpts(gateway.WithGatewayIntents(discord.GatewayIntentGuilds)),
 		bot.WithEventListeners(b.Commands, b.Listeners),
 	)
 	return err
 }
 
 func (b *Bot) StartBot() (err error) {
-	return b.Bot.ConnectGateway(context.TODO())
+	return b.Client.ConnectGateway(context.TODO())
 }

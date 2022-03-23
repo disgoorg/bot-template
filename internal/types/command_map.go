@@ -3,8 +3,9 @@ package types
 import (
 	"strings"
 
-	"github.com/DisgoOrg/disgo/core"
-	"github.com/DisgoOrg/disgo/core/events"
+	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/discord"
+	"github.com/disgoorg/disgo/events"
 )
 
 func NewCommandMap(bot *Bot) *CommandMap {
@@ -19,11 +20,11 @@ type CommandMap struct {
 	commands map[string]Command
 }
 
-func (m *CommandMap) OnEvent(event core.Event) {
+func (m *CommandMap) OnEvent(event bot.Event) {
 	if e, ok := event.(*events.ApplicationCommandInteractionEvent); ok {
-		if cmd, ok := m.commands[e.Data.Name()]; ok {
+		if cmd, ok := m.commands[e.Data.CommandName()]; ok {
 			switch d := e.Data.(type) {
-			case core.SlashCommandInteractionData:
+			case discord.SlashCommandInteractionData:
 				var name string
 				if d.SubCommandGroupName != nil && d.SubCommandName != nil {
 					name = *d.SubCommandGroupName + "/" + *d.SubCommandName
@@ -31,7 +32,7 @@ func (m *CommandMap) OnEvent(event core.Event) {
 					name = *d.SubCommandName
 				}
 				if cmd.CommandHandler == nil {
-					m.bot.Logger.Errorf("No command handler for \"%s\"", e.Data.Name())
+					m.bot.Logger.Errorf("No command handler for \"%s\"", e.Data.CommandName())
 					return
 				}
 				err := cmd.CommandHandler[buildCommandPath(d.SubCommandName, d.SubCommandGroupName)](m.bot, e)
@@ -52,7 +53,7 @@ func (m *CommandMap) OnEvent(event core.Event) {
 			}
 		}
 	} else if e, ok := event.(*events.ComponentInteractionEvent); ok {
-		customID := e.Data.ID().String()
+		customID := e.Data.CustomID().String()
 		if !strings.HasPrefix(customID, "cmd:") {
 			return
 		}

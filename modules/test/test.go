@@ -1,9 +1,9 @@
 package test
 
 import (
-	"github.com/DisgoOrg/bot-template/internal/types"
-	"github.com/DisgoOrg/disgo/core"
-	"github.com/DisgoOrg/disgo/discord"
+	"github.com/disgoorg/bot-template/internal/types"
+	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/discord"
 )
 
 var (
@@ -29,6 +29,6 @@ func (Module) Commands() []types.Command {
 	}
 }
 
-func (Module) OnEvent(b *types.Bot, event core.Event) {
+func (Module) OnEvent(b *types.Bot, event bot.Event) {
 
 }

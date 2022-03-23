@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/DisgoOrg/bot-template/internal/types"
-	"github.com/DisgoOrg/bot-template/modules"
-	"github.com/DisgoOrg/log"
+	"github.com/disgoorg/bot-template/internal/types"
+	"github.com/disgoorg/bot-template/modules"
+	"github.com/disgoorg/log"
 )
 
 var (
@@ -48,7 +48,7 @@ func main() {
 	if err = bot.SetupBot(); err != nil {
 		bot.Logger.Fatal("Failed to setup bot: ", err)
 	}
-	defer bot.Bot.Close(context.TODO())
+	defer bot.Client.Close(context.TODO())
 
 	if *shouldSyncCommands {
 		if err = bot.SyncCommands(); err != nil {

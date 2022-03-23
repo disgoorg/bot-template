@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/DisgoOrg/disgo/core/events"
-	"github.com/DisgoOrg/disgo/discord"
+	"github.com/disgoorg/disgo/discord"
+	"github.com/disgoorg/disgo/events"
 )
 
 type (
@@ -27,10 +27,10 @@ func (b *Bot) SyncCommands() error {
 
 	if b.Config.DevMode {
 		b.Logger.Info("Syncing guild commands...")
-		_, err := b.Bot.SetGuildCommands(b.Config.DevGuildID, commands)
+		_, err := b.Client.Rest().ApplicationService().SetGuildCommands(b.Client.ApplicationID(), b.Config.DevGuildID, commands)
 		return err
 	}
 	b.Logger.Infof("Syncing global commands...")
-	_, err := b.Bot.SetCommands(commands)
+	_, err := b.Client.Rest().ApplicationService().SetGlobalCommands(b.Client.ApplicationID(), commands)
 	return err
 }
