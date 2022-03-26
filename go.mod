@@ -1,9 +1,9 @@
 module github.com/disgoorg/bot-template
 
-go 1.17
+go 1.18
 
 require (
-	github.com/disgoorg/disgo v0.7.5-0.20220323112840-d41b55ad56ef
+	github.com/disgoorg/disgo v0.7.5-0.20220326114009-89adecf68540
 	github.com/disgoorg/log v1.2.0
 	github.com/disgoorg/snowflake v1.1.0
 	github.com/pkg/errors v0.9.1
