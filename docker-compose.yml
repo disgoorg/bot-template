@@ -1,21 +1,10 @@
 services:
   bot:
-    image: ghcr.io/disgoorg/bot-template
+    image: hcr.io/disgoorg/disgo-butler/bot
     restart: unless-stopped
     volumes:
-      - ./config.json:/home/bot/config.json
-    command: --sync-commands=true --sync-db=true
-    networks:
-      - bot
-  database:
-    image: postgres
-    restart: unless-stopped
-    volumes:
-      - ./data/:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_PASSWORD: example
-      POSTGRES_USER: bot
-      POSTGRES_DB: bot
+      - ./config.json:/opt/bot/config.json
+    command: --sync-commands=true
     networks:
       - bot
 

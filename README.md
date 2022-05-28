@@ -3,9 +3,7 @@
 
 # bot-template
 
-This is a simple bot template for creating a bot which includes a config, postgresql database, slash commands and event listeners.
+This is a simple bot template for creating a bot which includes a config, slash commands, components and event listeners.
 
 Optional CLI Flags:
 - `--sync-commands=true`: Synchronize commands with the discord.
-- `--sync-db=true`: Synchronize database.
-- `--exit-after=true`: Exit after db & commands sync.
