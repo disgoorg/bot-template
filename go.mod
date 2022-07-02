@@ -3,7 +3,7 @@ module github.com/disgoorg/bot-template
 go 1.18
 
 require (
-	github.com/disgoorg/disgo v0.12.0
+	github.com/disgoorg/disgo v0.13.0
 	github.com/disgoorg/log v1.2.0
 	github.com/disgoorg/snowflake/v2 v2.0.0
 	github.com/disgoorg/utils/paginator v0.0.0-20220528122731-2a4e682de628

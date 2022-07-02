@@ -41,7 +41,7 @@ func (b *Bot) SetupBot(listeners ...bot.EventListener) {
 	var err error
 	b.Client, err = disgo.New(b.Config.Token,
 		bot.WithLogger(b.Logger),
-		bot.WithGatewayConfigOpts(gateway.WithGatewayIntents(discord.GatewayIntentGuilds, discord.GatewayIntentGuildMessages, discord.GatewayIntentMessageContent)),
+		bot.WithGatewayConfigOpts(gateway.WithIntents(gateway.IntentGuilds, gateway.IntentGuildMessages, gateway.IntentMessageContent)),
 		bot.WithCacheConfigOpts(cache.WithCacheFlags(cache.FlagGuilds)),
 		bot.WithEventListenerFunc(b.OnReady),
 		bot.WithEventListenerFunc(b.OnApplicationCommandInteraction),
@@ -69,7 +69,7 @@ func (b *Bot) StartAndBlock() {
 
 func (b *Bot) OnReady(_ *events.Ready) {
 	b.Logger.Infof("Butler ready")
-	if err := b.Client.SetPresence(context.TODO(), discord.GatewayMessageDataPresenceUpdate{
+	if err := b.Client.SetPresence(context.TODO(), gateway.MessageDataPresenceUpdate{
 		Activities: []discord.Activity{
 			{
 				Name: "you",

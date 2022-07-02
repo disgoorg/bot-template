@@ -12,7 +12,7 @@ var TestCommand = tbot.Command{
 		Description: "Test command",
 		Options: []discord.ApplicationCommandOption{
 			discord.ApplicationCommandOptionString{
-				Name:         "choice",
+				OptionName:   "choice",
 				Description:  "some autocomplete choice",
 				Required:     true,
 				Autocomplete: true,
