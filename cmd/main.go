@@ -3,11 +3,12 @@ package main
 import (
 	"flag"
 
+	"github.com/disgoorg/bot-template"
 	"github.com/disgoorg/bot-template/commands"
 	"github.com/disgoorg/bot-template/components"
 	"github.com/disgoorg/bot-template/handlers"
-	"github.com/disgoorg/bot-template/tbot"
 	"github.com/disgoorg/log"
+	"github.com/disgoorg/snowflake/v2"
 )
 
 var (
@@ -21,7 +22,7 @@ func init() {
 }
 
 func main() {
-	cfg, err := tbot.LoadConfig()
+	cfg, err := bot_template.LoadConfig()
 	if err != nil {
 		panic("failed to load config: " + err.Error())
 	}
@@ -31,9 +32,18 @@ func main() {
 	logger.Infof("Starting bot version: %s", version)
 	logger.Infof("Syncing commands? %v", *shouldSyncCommands)
 
-	b := tbot.New(logger, version, *cfg)
+	b := bot_template.New(logger, version, *cfg)
 	b.SetupBot(handlers.MessageHandler(b))
-	b.SetupCommands(*shouldSyncCommands, commands.TestCommand)
-	b.SetupComponents(components.TestComponent)
+	b.Handler.AddCommands(commands.TestCommand(b))
+	b.Handler.AddComponents(components.TestComponent(b))
+
+	if *shouldSyncCommands {
+		var guildIDs []snowflake.ID
+		if cfg.DevMode {
+			guildIDs = append(guildIDs, cfg.DevGuildID)
+		}
+		b.Handler.SyncCommands(b.Client, guildIDs...)
+	}
+
 	b.StartAndBlock()
 }

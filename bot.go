@@ -1,4 +1,4 @@
-package tbot
+package bot_template
 
 import (
 	"context"
@@ -12,42 +12,38 @@ import (
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgo/gateway"
+	"github.com/disgoorg/handler"
 	"github.com/disgoorg/log"
 	"github.com/disgoorg/utils/paginator"
 )
 
 func New(logger log.Logger, version string, config Config) *Bot {
 	return &Bot{
-		Config:     config,
-		Logger:     logger,
-		Commands:   map[string]Command{},
-		Components: map[string]Component{},
-		Paginator:  paginator.NewManager(),
-		Version:    version,
+		Logger:    logger,
+		Config:    config,
+		Paginator: paginator.NewManager(),
+		Version:   version,
 	}
 }
 
 type Bot struct {
-	Client     bot.Client
-	Logger     log.Logger
-	Commands   map[string]Command
-	Components map[string]Component
-	Paginator  *paginator.Manager
-	Config     Config
-	Version    string
+	Logger    log.Logger
+	Handler   *handler.Handler
+	Client    bot.Client
+	Paginator *paginator.Manager
+	Config    Config
+	Version   string
 }
 
 func (b *Bot) SetupBot(listeners ...bot.EventListener) {
+	b.Handler = handler.New(b.Logger)
 	var err error
 	b.Client, err = disgo.New(b.Config.Token,
 		bot.WithLogger(b.Logger),
 		bot.WithGatewayConfigOpts(gateway.WithIntents(gateway.IntentGuilds, gateway.IntentGuildMessages, gateway.IntentMessageContent)),
 		bot.WithCacheConfigOpts(cache.WithCacheFlags(cache.FlagGuilds)),
 		bot.WithEventListenerFunc(b.OnReady),
-		bot.WithEventListenerFunc(b.OnApplicationCommandInteraction),
-		bot.WithEventListenerFunc(b.OnComponentInteraction),
-		bot.WithEventListenerFunc(b.OnAutocompleteInteraction),
-		bot.WithEventListeners(b.Paginator),
+		bot.WithEventListeners(b.Paginator, b.Handler),
 		bot.WithEventListeners(listeners...),
 	)
 	if err != nil {
@@ -56,7 +52,7 @@ func (b *Bot) SetupBot(listeners ...bot.EventListener) {
 }
 
 func (b *Bot) StartAndBlock() {
-	if err := b.Client.ConnectGateway(context.TODO()); err != nil {
+	if err := b.Client.OpenGateway(context.TODO()); err != nil {
 		b.Logger.Errorf("Failed to connect to gateway: %s", err)
 	}
 

@@ -1,4 +1,4 @@
-package tbot
+package bot_template
 
 import (
 	"errors"
