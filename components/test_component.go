@@ -11,7 +11,7 @@ import (
 func TestComponent(b *bot_template.Bot) handler.Component {
 	return handler.Component{
 		Name: "test_button",
-		Handler: func(args []string, e *events.ComponentInteractionCreate) error {
+		Handler: func(e *events.ComponentInteractionCreate) error {
 			return e.UpdateMessage(discord.MessageUpdate{
 				Content: json.NewPtr("This is a test button update"),
 			})

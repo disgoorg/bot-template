@@ -10,11 +10,11 @@ import (
 func TestCommand(b *bot_template.Bot) handler.Command {
 	return handler.Command{
 		Create: discord.SlashCommandCreate{
-			CommandName: "test",
+			Name:        "test",
 			Description: "Test command",
 			Options: []discord.ApplicationCommandOption{
 				discord.ApplicationCommandOptionString{
-					OptionName:   "choice",
+					Name:         "choice",
 					Description:  "some autocomplete choice",
 					Required:     true,
 					Autocomplete: true,

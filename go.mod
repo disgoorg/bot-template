@@ -3,11 +3,11 @@ module github.com/disgoorg/bot-template
 go 1.18
 
 require (
-	github.com/disgoorg/disgo v0.13.7
-	github.com/disgoorg/handler v0.1.0
+	github.com/disgoorg/disgo v0.13.16
+	github.com/disgoorg/handler v0.3.0
 	github.com/disgoorg/log v1.2.0
 	github.com/disgoorg/snowflake/v2 v2.0.0
-	github.com/disgoorg/utils/paginator v0.0.0-20220702232326-4d172e2902b6
+	github.com/disgoorg/utils/paginator v0.0.0-20220811191046-2474e390fa3b
 )
 
 require (
