@@ -14,6 +14,6 @@ RUN CGO_ENABLED=0 go build -ldflags="-X 'main.version=${VERSION}'-w -s" -o bot c
 
 FROM alpine
 
-COPY --from=build /build/bot /opt/bot/bot
+COPY --from=build /build/bot /bin/bot
 
-ENTRYPOINT ["/opt/bot/bot"]
+ENTRYPOINT ["/bin/bot"]

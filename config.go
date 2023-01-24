@@ -1,10 +1,10 @@
-package bot_template
+package dbot
 
 import (
 	"errors"
 	"os"
 
-	"github.com/disgoorg/disgo/json"
+	"github.com/disgoorg/json"
 	"github.com/disgoorg/log"
 	"github.com/disgoorg/snowflake/v2"
 )

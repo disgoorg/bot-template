@@ -6,8 +6,8 @@ import (
 	"github.com/disgoorg/disgo/events"
 )
 
-var MessageHandler = func(b *bot_template.Bot) bot.EventListener {
+func MessageHandler(b *dbot.Bot) bot.EventListener {
 	return bot.NewListenerFunc(func(e *events.MessageCreate) {
-
+		// TODO: handle message
 	})
 }

@@ -1,14 +1,19 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/disgoorg/bot-template"
 	"github.com/disgoorg/bot-template/commands"
 	"github.com/disgoorg/bot-template/components"
 	"github.com/disgoorg/bot-template/handlers"
+	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/handler"
 	"github.com/disgoorg/log"
-	"github.com/disgoorg/snowflake/v2"
 )
 
 var (
@@ -22,7 +27,7 @@ func init() {
 }
 
 func main() {
-	cfg, err := bot_template.LoadConfig()
+	cfg, err := dbot.LoadConfig()
 	if err != nil {
 		panic("failed to load config: " + err.Error())
 	}
@@ -30,20 +35,45 @@ func main() {
 	logger := log.New(log.Ldate | log.Ltime | log.Lshortfile)
 	logger.SetLevel(cfg.LogLevel)
 	logger.Infof("Starting bot version: %s", version)
-	logger.Infof("Syncing commands? %v", *shouldSyncCommands)
+	logger.Infof("Syncing commands? %t", *shouldSyncCommands)
 
-	b := bot_template.New(logger, version, *cfg)
-	b.SetupBot(handlers.MessageHandler(b))
-	b.Handler.AddCommands(commands.TestCommand(b))
-	b.Handler.AddComponents(components.TestComponent(b))
+	b := dbot.New(logger, version, *cfg)
+
+	h := handler.New()
+	h.HandleCommand("/test", commands.TestHandler)
+	h.HandleAutocomplete("/test", commands.TestAutocompleteHandler)
+	h.HandleCommand("/version", commands.VersionHandler(b))
+	h.HandleComponent("test_button", components.TestComponent)
+
+	b.SetupBot(h, bot.NewListenerFunc(b.OnReady), handlers.MessageHandler(b))
 
 	if *shouldSyncCommands {
-		var guildIDs []snowflake.ID
 		if cfg.DevMode {
-			guildIDs = append(guildIDs, cfg.DevGuildID)
+			logger.Warn("Syncing commands in dev mode")
+			_, err = b.Client.Rest().SetGuildCommands(b.Client.ApplicationID(), cfg.DevGuildID, commands.Commands)
+		} else {
+			logger.Info("Syncing commands")
+			_, err = b.Client.Rest().SetGlobalCommands(b.Client.ApplicationID(), commands.Commands)
 		}
-		b.Handler.SyncCommands(b.Client, guildIDs...)
+		if err != nil {
+			logger.Errorf("failed to sync commands: %s", err.Error())
+		}
 	}
 
-	b.StartAndBlock()
+	ctx, cancel := context.WithTimeout(context.Background(), 10)
+	defer cancel()
+	if err = b.Client.OpenGateway(ctx); err != nil {
+		b.Logger.Errorf("Failed to connect to gateway: %s", err)
+	}
+	defer func() {
+		cctx, ccancel := context.WithTimeout(context.Background(), 10)
+		defer ccancel()
+		b.Client.Close(cctx)
+	}()
+
+	b.Logger.Info("Bot is running. Press CTRL-C to exit.")
+	s := make(chan os.Signal, 1)
+	signal.Notify(s, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+	<-s
+	b.Logger.Info("Shutting down...")
 }
