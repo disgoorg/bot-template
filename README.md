@@ -3,7 +3,7 @@
 
 # bot-template
 
-This is a simple bot template for creating a bot which includes a config, application commands, components modals(using [handler](https://github.com/disgoorg/handler)) and event listeners.
+This is a simple bot template for creating a bot which includes a config, application commands, components modals(using [handler](https://github.com/disgoorg/disgo/tree/master/handler) and event listeners.
 
 Optional CLI Flags:
 - `--sync-commands=true`: Synchronize commands with the discord.
