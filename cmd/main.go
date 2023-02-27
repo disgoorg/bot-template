@@ -7,13 +7,14 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/handler"
+	"github.com/disgoorg/log"
+
 	"github.com/disgoorg/bot-template"
 	"github.com/disgoorg/bot-template/commands"
 	"github.com/disgoorg/bot-template/components"
 	"github.com/disgoorg/bot-template/handlers"
-	"github.com/disgoorg/disgo/bot"
-	"github.com/disgoorg/disgo/handler"
-	"github.com/disgoorg/log"
 )
 
 var (
@@ -40,10 +41,10 @@ func main() {
 	b := dbot.New(logger, version, *cfg)
 
 	h := handler.New()
-	h.HandleCommand("/test", commands.TestHandler)
-	h.HandleAutocomplete("/test", commands.TestAutocompleteHandler)
-	h.HandleCommand("/version", commands.VersionHandler(b))
-	h.HandleComponent("test_button", components.TestComponent)
+	h.Command("/test", commands.TestHandler)
+	h.Autocomplete("/test", commands.TestAutocompleteHandler)
+	h.Command("/version", commands.VersionHandler(b))
+	h.Component("test_button", components.TestComponent)
 
 	b.SetupBot(h, bot.NewListenerFunc(b.OnReady), handlers.MessageHandler(b))
 
@@ -65,11 +66,7 @@ func main() {
 	if err = b.Client.OpenGateway(ctx); err != nil {
 		b.Logger.Errorf("Failed to connect to gateway: %s", err)
 	}
-	defer func() {
-		cctx, ccancel := context.WithTimeout(context.Background(), 10)
-		defer ccancel()
-		b.Client.Close(cctx)
-	}()
+	defer b.Client.Close(context.TODO())
 
 	b.Logger.Info("Bot is running. Press CTRL-C to exit.")
 	s := make(chan os.Signal, 1)
