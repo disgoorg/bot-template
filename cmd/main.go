@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/disgoorg/disgo/bot"
 	"github.com/disgoorg/disgo/handler"
@@ -50,7 +51,7 @@ func main() {
 
 	if *shouldSyncCommands {
 		if cfg.DevMode {
-			logger.Warn("Syncing commands in dev mode")
+			logger.Info("Syncing commands in dev mode")
 			_, err = b.Client.Rest().SetGuildCommands(b.Client.ApplicationID(), cfg.DevGuildID, commands.Commands)
 		} else {
 			logger.Info("Syncing commands")
@@ -61,7 +62,7 @@ func main() {
 		}
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err = b.Client.OpenGateway(ctx); err != nil {
 		b.Logger.Errorf("Failed to connect to gateway: %s", err)
