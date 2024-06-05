@@ -1,0 +1,14 @@
+[linters]
+disable-all = true
+enable = [
+    "gosimple",
+    "govet",
+    "gofmt",
+    "ineffassign",
+    "staticcheck",
+    "sloglint",
+    "whitespace",
+    "errname",
+    "errorlint",
+    "importas"
+]

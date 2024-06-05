@@ -1,6 +1,6 @@
+.idea/
 .github/
-.editorconfig
 README.md
 LICENSE
-config.json
-config.json.example
+config.toml
+config.example.toml

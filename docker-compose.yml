@@ -1,12 +1,13 @@
 services:
   bot:
-    image: hcr.io/disgoorg/disgo-butler/bot
+    image: ghcr.io/disgoorg/bot-template
     restart: unless-stopped
     volumes:
-      - ./config.json:/opt/bot/config.json
-    command: --sync-commands=true
+      - ./config.toml:/var/lib/config.toml
+    command: -config=/var/lib/config.toml --sync-commands=true
     networks:
       - bot
 
 networks:
   bot:
+    name: bot

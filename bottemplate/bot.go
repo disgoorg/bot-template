@@ -1,7 +1,9 @@
-package dbot
+package bottemplate
 
 import (
 	"context"
+	"log/slog"
+	"time"
 
 	"github.com/disgoorg/disgo"
 	"github.com/disgoorg/disgo/bot"
@@ -9,44 +11,46 @@ import (
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgo/gateway"
-	"github.com/disgoorg/log"
 	"github.com/disgoorg/paginator"
 )
 
-func New(logger log.Logger, version string, config Config) *Bot {
+func New(cfg Config, version string, commit string) *Bot {
 	return &Bot{
-		Logger:    logger,
-		Config:    config,
+		Cfg:       cfg,
 		Paginator: paginator.New(),
 		Version:   version,
+		Commit:    commit,
 	}
 }
 
 type Bot struct {
-	Logger    log.Logger
+	Cfg       Config
 	Client    bot.Client
 	Paginator *paginator.Manager
-	Config    Config
 	Version   string
+	Commit    string
 }
 
-func (b *Bot) SetupBot(listeners ...bot.EventListener) {
-	var err error
-	b.Client, err = disgo.New(b.Config.Token,
-		bot.WithLogger(b.Logger),
+func (b *Bot) SetupBot(listeners ...bot.EventListener) error {
+	client, err := disgo.New(b.Cfg.Bot.Token,
 		bot.WithGatewayConfigOpts(gateway.WithIntents(gateway.IntentGuilds, gateway.IntentGuildMessages, gateway.IntentMessageContent)),
 		bot.WithCacheConfigOpts(cache.WithCaches(cache.FlagGuilds)),
 		bot.WithEventListeners(b.Paginator),
 		bot.WithEventListeners(listeners...),
 	)
 	if err != nil {
-		b.Logger.Fatal("Failed to setup b: ", err)
+		return err
 	}
+
+	b.Client = client
+	return nil
 }
 
 func (b *Bot) OnReady(_ *events.Ready) {
-	b.Logger.Infof("Butler ready")
-	if err := b.Client.SetPresence(context.TODO(), gateway.WithListeningActivity("you"), gateway.WithOnlineStatus(discord.OnlineStatusOnline)); err != nil {
-		b.Logger.Errorf("Failed to set presence: %s", err)
+	slog.Info("bot-template ready")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := b.Client.SetPresence(ctx, gateway.WithListeningActivity("you"), gateway.WithOnlineStatus(discord.OnlineStatusOnline)); err != nil {
+		slog.Error("Failed to set presence", slog.Any("err", err))
 	}
 }
