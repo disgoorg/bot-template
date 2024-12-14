@@ -18,7 +18,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     CGO_ENABLED=0 \
     GOOS=$TARGETOS \
     GOARCH=$TARGETARCH \
-    go build -ldflags="-X 'main.version=${VERSION}' -X 'main.commit=${COMMIT}'" -o bot github.com/disgoorg/bot-template
+    go build -ldflags="-X 'main.Version=${VERSION}' -X 'main.Commit=${COMMIT}'" -o bot github.com/disgoorg/bot-template
 
 FROM alpine
 

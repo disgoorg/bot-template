@@ -3,9 +3,10 @@ package commands
 import (
 	"fmt"
 
-	"github.com/disgoorg/bot-template/bottemplate"
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/handler"
+
+	"github.com/disgoorg/bot-template/bottemplate"
 )
 
 var version = discord.SlashCommandCreate{

@@ -9,17 +9,18 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/handler"
+
 	"github.com/disgoorg/bot-template/bottemplate"
 	"github.com/disgoorg/bot-template/bottemplate/commands"
 	"github.com/disgoorg/bot-template/bottemplate/components"
 	"github.com/disgoorg/bot-template/bottemplate/handlers"
-	"github.com/disgoorg/disgo/bot"
-	"github.com/disgoorg/disgo/handler"
 )
 
 var (
-	version = "dev"
-	commit  = "unknown"
+	Version = "dev"
+	Commit  = "unknown"
 )
 
 func main() {
@@ -34,10 +35,10 @@ func main() {
 	}
 
 	setupLogger(cfg.Log)
-	slog.Info("Starting bot-template...", slog.String("version", version), slog.String("commit", commit))
+	slog.Info("Starting bot-template...", slog.String("version", Version), slog.String("commit", Commit))
 	slog.Info("Syncing commands", slog.Bool("sync", *shouldSyncCommands))
 
-	b := bottemplate.New(*cfg, version, commit)
+	b := bottemplate.New(*cfg, Version, Commit)
 
 	h := handler.New()
 	h.Command("/test", commands.TestHandler)
